@@ -69,8 +69,8 @@
     {
       "type": "Script Operator",
       "args": {
-        "content": "<<< 请在这里粘贴下方【风险节点过滤脚本（修复版）】的完整 JS >>>",
-        "mode": "script",
+        "content": "https://raw.githubusercontent.com/Moyucharm/substore/refs/heads/main/%E9%A3%8E%E9%99%A9%E8%8A%82%E7%82%B9%E8%BF%87%E6%BB%A4%E8%84%9A%E6%9C%AC.js",
+        "mode": "link",
         "arguments": {}
       },
       "id": "49449781.9219881",
@@ -92,13 +92,12 @@
     },
     {
       "type": "Script Operator",
+      "customName": "保留括号标签·前置",
       "args": {
-        "content": "// IPv6节点入口解析命名脚本，如需对域名的AAAA记录解析可以启用上面的操作\nif ((ProxyUtils.isIPv6($server.server) || $server.name.match(/ipv6|v6/i)) && !$server.name.includes('[IPv6]')) {\n  $server.name = `${$server.name} [IPv6]`;\n}\n\nif ($server._domain) $server.server = $server._domain",
-        "mode": "script",
-        "arguments": {}
+        "mode": "link",
+        "arguments": { "allow": "DMIT|IPLC|IEPL|CN2|AS9929" },
+        "content": "https://raw.githubusercontent.com/Moyucharm/substore/refs/heads/main/%E5%89%8D%E7%BD%AE%E6%8A%93%E5%8F%96%E8%84%9A%E6%9C%AC.js"
       },
-      "customName": "",
-      "id": "56832536.65291016",
       "disabled": false
     },
     {
@@ -121,25 +120,22 @@
     },
     {
       "type": "Script Operator",
+      "customName": "IPv6 标注",
       "args": {
-        "content": "// 链式代理自动设置脚本，自动选择对应地区节点进行中继（示例，默认禁用）",
         "mode": "script",
-        "arguments": {}
+        "content": "if ((ProxyUtils.isIPv6($server.server) || /ipv6|v6/i.test($server.name)) && !$server.name.includes('[IPv6]')) {$server.name = `${$server.name} [IPv6]`;} if ($server._domain) $server.server = $server._domain;"
       },
-      "customName": "",
-      "id": "13667343.20577676",
-      "disabled": true
+      "disabled": false
     },
     {
       "type": "Script Operator",
+      "customName": "保留括号标签·回填",
       "args": {
-        "content": "// 链式代理自动设置脚本（统一走“中继选择”，示例，默认禁用）",
         "mode": "script",
-        "arguments": {}
+        "arguments": {},
+        "content": "https://raw.githubusercontent.com/Moyucharm/substore/refs/heads/main/%E5%90%8E%E7%BD%AE%E5%9B%9E%E5%A1%AB%E8%84%9A%E6%9C%AC.js"
       },
-      "customName": "",
-      "id": "75280958.54806618",
-      "disabled": true
+      "disabled": false
     }
   ],
   "subscriptions": [],
