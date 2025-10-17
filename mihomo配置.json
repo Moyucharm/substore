@@ -21,7 +21,7 @@
     {
       "type": "Script Operator",
       "args": {
-        "content": "https://raw.githubusercontent.com/wangbaoqiang-lixiaolu/substore/refs/heads/main/grok.yaml#noCache",
+        "content": "https://raw.githubusercontent.com/Moyucharm/substore/refs/heads/main/rules.yaml#noCache",
         "mode": "link",
         "arguments": {}
       },
