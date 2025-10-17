@@ -9,41 +9,70 @@
 
 dns:
   enable: true
-  listen: "0.0.0.0:1053"
   prefer-h3: false
-  respect-rules: true
-  use-system-hosts: false
-  cache-algorithm: "arc"
-  enhanced-mode: "fake-ip"
+  listen: "0.0.0.0:1053"
+  ipv6: false
+  enhanced-mode: fake-ip
   fake-ip-range: "198.18.0.1/16"
   fake-ip-filter:
     - "+.lan"
     - "+.local"
+    - "localhost.ptlogin2.qq.com"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
-    - "localhost.ptlogin2.qq.com"
-    - "localhost.sec.qq.com"
-    - "localhost.work.weixin.qq.com"
+    - "+.googleapis.com"
+    - "+.googleapis.cn"
+    - "alt1-mtalk.google.com"
+    - "alt2-mtalk.google.com"
+    - "alt3-mtalk.google.com"
+    - "alt4-mtalk.google.com"
+    - "alt5-mtalk.google.com"
+    - "alt6-mtalk.google.com"
+    - "alt7-mtalk.google.com"
+    - "alt8-mtalk.google.com"
+    - "mtalk.google.com"
+  use-hosts: true
+
+  # 仅用于引导/解析代理域名，直连且不经代理
   default-nameserver:
-    - "223.5.5.5"
-    - "1.2.4.8"
-  nameserver:
-    - "https://cloudflare-dns.com/dns-query"
-    - "https://77.88.8.8/dns-query"
-    - "https://8.8.4.4/dns-query#ecs=1.1.1.1/24&ecs-override=true"
-    - "https://208.67.222.222/dns-query#ecs=1.1.1.1/24&ecs-override=true"
-    - "https://9.9.9.9/dns-query"
+    - "114.114.114.114#DIRECT"
+    - "223.5.5.5#DIRECT"
+    - "119.29.29.29#DIRECT"
+    - "180.76.76.76#DIRECT"
+    - "180.184.1.1#DIRECT"
+
+  # 给“代理服务器域名解析”用，直连 DoH，避免代理循环
   proxy-server-nameserver:
-    - "https://223.5.5.5/dns-query"
-    - "https://doh.pub/dns-query"
-  direct-nameserver:
-    - "https://223.5.5.5/dns-query"
-    - "https://doh.pub/dns-query"
-  direct-nameserver-follow-policy: false
+    - "https://dns.alidns.com/dns-query#DIRECT"
+    - "https://doh.pub/dns-query#DIRECT"
+    - "https://doh.onedns.net/dns-query#DIRECT"
+
+  # 真正用于业务域名解析：全部走代理组，防泄露
+  nameserver:
+    - "https://cloudflare-dns.com/dns-query#🔰模式选择"
+    - "https://dns.google/dns-query#🔰模式选择"
+    - "https://dns.quad9.net/dns-query#🔰模式选择"
+
+  # 指定域名/集合的解析策略（能直连的就直连 DoH，易泄露/跨域的走代理 DoH）
   nameserver-policy:
     "geosite:cn":
-      - "https://223.5.5.5/dns-query"
-      - "https://doh.pub/dns-query"
+      - "https://dns.alidns.com/dns-query#DIRECT"
+      - "https://doh.pub/dns-query#DIRECT"
+    "+.msftconnecttest.com,+.msftncsi.com": "https://cloudflare-dns.com/dns-query#🔰模式选择"
+    "+.googleapis.com,+.googleapis.cn": "https://cloudflare-dns.com/dns-query#🔰模式选择"
+
+
+tun:
+  enable: true
+  stack: gvisor
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: true
+  dns-hijack:
+    - any:53          # 劫持所有 53 UDP/TCP
+  device: SakuraiTunnel
+  mtu: 1500           # 9000 容易出问题；不稳就用 1500/1480
+  endpoint-independent-nat: true
 
 rule-providers:
   reject:
