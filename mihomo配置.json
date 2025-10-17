@@ -1,0 +1,41 @@
+{
+  "name": "mihomo配置",
+  "displayName": "",
+  "remark": "",
+  "icon": "https://raw.githubusercontent.com/cc63/ICON/main/icons/Clash.png",
+  "source": "local",
+  "sourceType": "collection",
+  "sourceName": "substore组合订阅模板",
+  "process": [
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": " // 组合订阅-自建：链式代理控制（直连优先 & 不改名）\nfunction main({ proxies }) {\n  const DIRECT_HINT = /(直连|DIRECT|免中继)/i;  // 命中 ⇒ 不链式\n  const CHAIN_HINTS = [/落地/i, /家宽/i];       // 命中 ⇒ 走链式\n\n  for (const p of proxies) {\n    if (!p.name) continue;\n\n    // 1) 命中“直连标记” ⇒ 确保不走链式（并清理已存在的相关字段）\n    if (DIRECT_HINT.test(p.name)) {\n      if (p[\"dialer-proxy\"]) delete p[\"dialer-proxy\"];\n      if (p[\"underlying-proxy\"]) delete p[\"underlying-proxy\"];\n      continue; // 跳过后面的链式判定\n    }\n\n    // 2) 非直连，再看是否需要链式\n    if (CHAIN_HINTS.some(re => re.test(p.name))) {\n      if (!p[\"dialer-proxy\"]) {\n        p[\"dialer-proxy\"] = \"⚙️ 节点选择\"; // 确保你的 Mihomo 配置里有这个 Selector 组\n      }\n    } else {\n      if (p[\"dialer-proxy\"]) delete p[\"dialer-proxy\"];\n    }\n  }\n  return { proxies };\n}\n",
+        "mode": "script",
+        "arguments": {}
+      },
+      "customName": "链式代理",
+      "id": "linkchain-001",
+      "disabled": false
+    },
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": "https://raw.githubusercontent.com/wangbaoqiang-lixiaolu/substore/refs/heads/main/grok.yaml#noCache",
+        "mode": "link",
+        "arguments": {}
+      },
+      "customName": "配置文件",
+      "id": "configfile-002",
+      "disabled": false
+    }
+  ],
+  "type": "mihomoProfile",
+  "content": "// 填入文件内容",
+  "download": true,
+  "display-name": "",
+  "ignoreFailedRemoteFile": false,
+  "subInfoUrl": "",
+  "isIconColor": true
+}
+

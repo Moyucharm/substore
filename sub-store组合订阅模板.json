@@ -1,0 +1,151 @@
+{
+  "name": "substore组合订阅模板",
+  "displayName": "",
+  "form": "",
+  "remark": "",
+  "mergeSources": "",
+  "ignoreFailedRemoteSub": "quiet",
+  "passThroughUA": false,
+  "icon": "",
+  "process": [
+    {
+      "type": "Quick Setting Operator",
+      "args": {
+        "useless": "DISABLED",
+        "udp": "DEFAULT",
+        "scert": "ENABLED",
+        "tfo": "DEFAULT",
+        "vmess aead": "DEFAULT"
+      }
+    },
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": "https://raw.githubusercontent.com/xream/scripts/refs/heads/main/surge/modules/sub-store-scripts/sub-info/sum.js",
+        "mode": "link",
+        "arguments": {}
+      },
+      "customName": "",
+      "id": "28460290.72169969",
+      "disabled": false
+    },
+    {
+      "type": "Regex Filter",
+      "args": {
+        "keep": false,
+        "regex": [
+          "群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|付费|失联|设置|总计|(\\b(USE|USED|TOTAL|EXPIRE|EMAIL|Panel)\\b|(\\d{4}-\\d{2}-\\d{2}|\\dG))"
+        ]
+      },
+      "id": "10354460.04108187",
+      "disabled": false
+    },
+    {
+      "type": "Handle Duplicate Operator",
+      "args": {
+        "action": "rename",
+        "position": "back",
+        "template": "0 1 2 3 4 5 6 7 8 9",
+        "link": " "
+      },
+      "id": "20454324.864660557",
+      "disabled": false
+    },
+    {
+      "type": "Flag Operator",
+      "args": {
+        "mode": "add",
+        "tw": "cn"
+      },
+      "id": "72382003.7008269",
+      "disabled": false
+    },
+    {
+      "type": "Sort Operator",
+      "args": "asc",
+      "id": "25116284.22819716",
+      "disabled": false
+    },
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": "<<< 请在这里粘贴下方【风险节点过滤脚本（修复版）】的完整 JS >>>",
+        "mode": "script",
+        "arguments": {}
+      },
+      "id": "49449781.9219881",
+      "disabled": true
+    },
+    {
+      "type": "Resolve Domain Operator",
+      "args": {
+        "provider": "Ali",
+        "type": "IPv6",
+        "filter": "disabled",
+        "cache": "enabled",
+        "url": "",
+        "edns": ""
+      },
+      "customName": "",
+      "id": "69491248.72493628",
+      "disabled": true
+    },
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": "// IPv6节点入口解析命名脚本，如需对域名的AAAA记录解析可以启用上面的操作\nif ((ProxyUtils.isIPv6($server.server) || $server.name.match(/ipv6|v6/i)) && !$server.name.includes('[IPv6]')) {\n  $server.name = `${$server.name} [IPv6]`;\n}\n\nif ($server._domain) $server.server = $server._domain",
+        "mode": "script",
+        "arguments": {}
+      },
+      "customName": "",
+      "id": "56832536.65291016",
+      "disabled": false
+    },
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": "https://raw.githubusercontent.com/Keywos/rule/main/rename.js#bl=true&blkey=%E5%AE%B6%E5%AE%BD%2BIPLC%2BIEPL%2B%E8%90%BD%E5%9C%B0%2BIPv6%2B%E7%9B%B4%E8%BF%9E%2BDIRECT%3E%E7%9B%B4%E8%BF%9E%2BDirect%3E%E7%9B%B4%E8%BF%9E%2B%E5%85%8D%E4%B8%AD%E7%BB%A7%3E%E7%9B%B4%E8%BF%9E&flag=true&in=true&nm=true&out=en%2Bcn",
+        "mode": "link",
+        "arguments": {
+          "bl": "true",
+          "blkey": "家宽+IPLC+IEPL+落地+IPv6+直连+DIRECT>直连+Direct>直连+免中继>直连",
+          "flag": "true",
+          "in": "true",
+          "nm": "true",
+          "out": "en+cn"
+        }
+      },
+      "customName": "节点重命名",
+      "id": "25705468.712085843",
+      "disabled": false
+    },
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": "// 链式代理自动设置脚本，自动选择对应地区节点进行中继（示例，默认禁用）",
+        "mode": "script",
+        "arguments": {}
+      },
+      "customName": "",
+      "id": "13667343.20577676",
+      "disabled": true
+    },
+    {
+      "type": "Script Operator",
+      "args": {
+        "content": "// 链式代理自动设置脚本（统一走“中继选择”，示例，默认禁用）",
+        "mode": "script",
+        "arguments": {}
+      },
+      "customName": "",
+      "id": "75280958.54806618",
+      "disabled": true
+    }
+  ],
+  "subscriptions": [],
+  "tag": [],
+  "subscriptionTags": [],
+  "display-name": "",
+  "subUserinfo": "upload=790924; download=240785765; total=32212254720 ; expire=1790780729",
+  "isIconColor": true
+}
