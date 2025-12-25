@@ -69,9 +69,9 @@ tun:
   auto-detect-interface: true
   strict-route: true
   dns-hijack:
-    - any:53          # 劫持所有 53 UDP/TCP
+    - any:53
   device: SakuraiTunnel
-  mtu: 1500           # 9000 容易出问题；不稳就用 1500/1480
+  mtu: 1500
   endpoint-independent-nat: true
 
 rule-providers:
@@ -236,42 +236,35 @@ rule-providers:
     path: "./ruleset/MetaCubeX/microsoft.yaml"
 
 rules:
-  # 进程优先
   - "PROCESS-NAME,dota2.exe,🔗 全局直连"
   - "PROCESS-NAME,steam.exe,🔗 全局直连"
 
-  # 自定义规则：直连/代理（对应 providers）
   - "RULE-SET,customdirect,🔗 全局直连"
   - "RULE-SET,customproxy,🔰 模式选择"
 
-  # 常见直达模式选择域名
   - "DOMAIN-SUFFIX,googleapis.cn,🔰 模式选择"
   - "DOMAIN-SUFFIX,gstatic.com,🔰 模式选择"
   - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🔰 模式选择"
   - "DOMAIN-SUFFIX,github.io,🔰 模式选择"
   - "DOMAIN,v2rayse.com,🔰 模式选择"
 
-  # AI/服务分流
   - "RULE-SET,openai,💬 ChatGPT-Claude-XAI-Perplexity"
-  - "RULE-SET,anthropic,💬 ChatGPT-Claude-XAI-Perplexity"     # Claude 并入 ChatGPT 组
+  - "RULE-SET,anthropic,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,xai,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,perplexity,💬 ChatGPT-Claude-XAI-Perplexity"
-  - "RULE-SET,google-gemini,🔮 Gemini"                         # Gemini 独立
+  - "RULE-SET,google-gemini,🔮 Gemini"
 
-  # 其它服务
-  - "RULE-SET,pikpak,🔰 模式选择"      # 原指🅿️ PikPak → 改走模式选择
-  - "RULE-SET,bybit,🔰 模式选择"       # 原指🪙 Bybit → 改走模式选择
+  - "RULE-SET,pikpak,🔰 模式选择"
+  - "RULE-SET,bybit,🔰 模式选择"
 
-  # 系统/直连/拦截
   - "RULE-SET,applications,🔗 全局直连"
   - "RULE-SET,private,🔗 全局直连"
   - "RULE-SET,reject,🥰 广告过滤"
   - "RULE-SET,microsoft,Ⓜ️ 微软服务"
   - "RULE-SET,icloud,🍎 苹果服务"
   - "RULE-SET,apple,🍎 苹果服务"
-  - "RULE-SET,google,🔰 模式选择"      # 原指📢 谷歌服务 → 改走模式选择
+  - "RULE-SET,google,🔰 模式选择"
 
-  # 直连优先
   - "RULE-SET,direct,🔗 全局直连"
   - "RULE-SET,lancidr,🔗 全局直连,no-resolve"
   - "RULE-SET,cncidr,🔗 全局直连,no-resolve"
@@ -279,11 +272,9 @@ rules:
   - "GEOIP,LAN,🔗 全局直连,no-resolve"
   - "GEOIP,CN,🔗 全局直连,no-resolve"
 
-  # 兜底：未命中任何规则的流量走 🐟，默认会指向 🔰 模式选择
   - "MATCH,🐟 漏网之鱼"
 
 proxy-groups:
-  # 你的“模式选择”入口：一般流量进来首选这里
   - name: "🔰 模式选择"
     type: select
     proxies:
@@ -297,7 +288,6 @@ proxy-groups:
     max-failed-times: 3
     hidden: false
 
-  # 中继/前置选择：不包含“落地/家宽”类节点
   - name: "⚙️ 节点选择"
     type: select
     proxies:
@@ -312,7 +302,6 @@ proxy-groups:
     hidden: false
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/adjust.svg"
 
-  # 落地/家宽：组级链式到“⚙️ 节点选择”
   - name: "🕊️ 落地节点"
     type: select
     include-all: true
@@ -326,7 +315,6 @@ proxy-groups:
     hidden: false
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/openwrt.svg"
 
-  # 非常轻量的“自动优选”：不含落地/家宽
   - name: "♻️ 延迟选优"
     type: url-test
     tolerance: 50
@@ -340,7 +328,6 @@ proxy-groups:
     hidden: false
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/speed.svg"
 
-  # AI 组（含 OpenAI / Claude / XAI / Perplexity）
   - name: "💬 ChatGPT-Claude-XAI-Perplexity"
     type: select
     proxies:
@@ -350,7 +337,6 @@ proxy-groups:
       - "🔗 全局直连"
       - "♻️ 延迟选优"
     include-all: true
-    # 仍保留地理排除，避免区域不支持
     exclude-filter: "(?i)港|hk|hongkong|hong kong|俄|ru|russia|澳|macao"
     interval: 3600
     timeout: 3000
@@ -360,18 +346,17 @@ proxy-groups:
     hidden: false
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/chatgpt.svg"
 
-  # 独立的 Gemini 组
+  # ✅ 按你的要求：Gemini 改为“选择器”，像 🍎 苹果服务 一样，不展开全节点
+  # ✅ 并新增一个选项：💬 ChatGPT-Claude-XAI-Perplexity
   - name: "🔮 Gemini"
     type: select
     proxies:
       - "🔰 模式选择"
+      - "💬 ChatGPT-Claude-XAI-Perplexity"
       - "⚙️ 节点选择"
       - "🕊️ 落地节点"
       - "🔗 全局直连"
       - "♻️ 延迟选优"
-    include-all: true
-    # 可按需保留相同的区域排除
-    exclude-filter: "(?i)港|hk|hongkong|hong kong|俄|ru|russia|澳|macao"
     interval: 3600
     timeout: 3000
     url: "https://www.google.com/generate_204"
@@ -380,7 +365,6 @@ proxy-groups:
     hidden: false
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/google.svg"
 
-  # Telegram、Apple、Microsoft、广告过滤、直连/拦截、兜底
   - name: "📲 电报消息"
     type: select
     proxies:
