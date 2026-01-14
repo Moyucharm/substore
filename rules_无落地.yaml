@@ -1,11 +1,12 @@
-# Substore 兼容配置文件，基于 Mihomo Party 脚本改编
-# 变更点：
-# 1) 去除代理组名前的空格占位，统一命名
-# 2) 删除：负载均衡(散列) / 负载均衡(轮询) / 故障转移 / 国外媒体 / Bybit / PikPak / 谷歌服务 / 自定义直连 / 自定义代理 / Claude
-# 3) Claude 规则并入 ChatGPT 组，并将该组重命名为「💬 ChatGPT-Claude-XAI-Perplexity」
-# 4) 新增独立的「🔮 Gemini」组，并将 google-gemini 规则指向该组
-# 5) 所有被删除组的规则统一改指向：🔰 模式选择（保持你的“分流独立、链式独立”的思路）
-# 6) 删除了“🕊️ 落地节点”组，将其合并至“⚙️ 节点选择”中
+# Substore 兼容 Mihomo / Mihomo Party 配置（rules 精简版）
+# 目标：
+# 1) 保持并修正 DNS 防泄露（DNS 出口指向 🔰 模式选择，避免名称不一致导致失效）
+# 2) 不改变现有分流逻辑前提下，降低内存占用：服务类策略组不再 include-all（避免重复挂载全部节点）
+# 3) 🔮 Gemini 组改为「🔮 Google+Gemini」，并承载全部 Google（含 Gemini）分流
+# 4) Telegram 补充 Web 端域名规则（仅靠 telegramcidr 可能无法覆盖 web.telegram.org）
+# 5) 🍎/Ⓜ️ 服务组仅保留选择器（模式/节点/落地/直连）
+# 6) 去除无实际作用的「❌ 全局拦截」，以及「🐟 漏网之鱼」兜底（兜底直接走 🔰 模式选择）
+# 7) 本版本保留“无落地”链式 + 延迟选优筛选定制
 
 dns:
   enable: true
@@ -33,7 +34,7 @@ dns:
     - "mtalk.google.com"
   use-hosts: true
 
-  # 仅用于引导/解析代理域名，直连且不经代理
+  # 仅用于引导解析代理域名：直连且不经代理
   default-nameserver:
     - "114.114.114.114#DIRECT"
     - "223.5.5.5#DIRECT"
@@ -41,19 +42,19 @@ dns:
     - "180.76.76.76#DIRECT"
     - "180.184.1.1#DIRECT"
 
-  # 给“代理服务器域名解析”用，直连 DoH，避免代理循环
+  # 给“代理服务器域名解析”用：直连 DoH，避免代理循环
   proxy-server-nameserver:
     - "https://dns.alidns.com/dns-query#DIRECT"
     - "https://doh.pub/dns-query#DIRECT"
     - "https://doh.onedns.net/dns-query#DIRECT"
 
-  # 真正用于业务域名解析：全部走代理组，防泄露
+  # 业务域名解析：全部走代理组（防泄露）
   nameserver:
-    - "https://cloudflare-dns.com/dns-query#🔰模式选择"
-    - "https://dns.google/dns-query#🔰模式选择"
-    - "https://dns.quad9.net/dns-query#🔰模式选择"
+    - "https://cloudflare-dns.com/dns-query#🔰 模式选择"
+    - "https://dns.google/dns-query#🔰 模式选择"
+    - "https://dns.quad9.net/dns-query#🔰 模式选择"
 
-  # 指定域名/集合的解析策略（能直连的就直连 DoH，易泄露/跨域的走代理 DoH）
+  # 指定域名/集合的解析策略：能直连的就直连 DoH，易泄露/跨域的走代理 DoH
   nameserver-policy:
     "geosite:cn":
       - "https://dns.alidns.com/dns-query#DIRECT"
@@ -69,9 +70,9 @@ tun:
   auto-detect-interface: true
   strict-route: true
   dns-hijack:
-    - any:53          # 劫持所有 53 UDP/TCP
+    - any:53 # 劫持所有 53 UDP/TCP
   device: SakuraiTunnel
-  mtu: 1500           # 9000 容易出问题；不稳就用 1500/1480
+  mtu: 1500 # 9000 容易出问题；不稳就用 1500/1480
   endpoint-independent-nat: true
 
 rule-providers:
@@ -147,14 +148,6 @@ rule-providers:
     url: "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt"
     path: "./ruleset/loyalsoldier/private.yaml"
 
-  gfw:
-    type: http
-    format: yaml
-    interval: 86400
-    behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
-    path: "./ruleset/loyalsoldier/gfw.yaml"
-
   tld-not-cn:
     type: http
     format: yaml
@@ -162,6 +155,14 @@ rule-providers:
     behavior: domain
     url: "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
     path: "./ruleset/loyalsoldier/tld-not-cn.yaml"
+
+  gfw:
+    type: http
+    format: yaml
+    interval: 86400
+    behavior: domain
+    url: "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
+    path: "./ruleset/loyalsoldier/gfw.yaml"
 
   telegramcidr:
     type: http
@@ -227,14 +228,6 @@ rule-providers:
     url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/anthropic.yaml"
     path: "./ruleset/MetaCubeX/anthropic.yaml"
 
-  google-gemini:
-    type: http
-    format: yaml
-    interval: 86400
-    behavior: classical
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/google-gemini.yaml"
-    path: "./ruleset/MetaCubeX/google-gemini.yaml"
-
   xai:
     type: http
     format: yaml
@@ -259,7 +252,28 @@ rule-providers:
     url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/microsoft.yaml"
     path: "./ruleset/MetaCubeX/microsoft.yaml"
 
+  google-gemini:
+    type: http
+    format: yaml
+    interval: 86400
+    behavior: classical
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/google-gemini.yaml"
+    path: "./ruleset/MetaCubeX/google-gemini.yaml"
+
 rules:
+  # Telegram（补充 Web 端域名）
+  - "DOMAIN,web.telegram.org,📲 电报消息"
+  - "DOMAIN,webk.telegram.org,📲 电报消息"
+  - "DOMAIN,webz.telegram.org,📲 电报消息"
+  - "DOMAIN,api.telegram.org,📲 电报消息"
+  - "DOMAIN,core.telegram.org,📲 电报消息"
+  - "DOMAIN-SUFFIX,t.me,📲 电报消息"
+  - "DOMAIN-SUFFIX,telegram.org,📲 电报消息"
+  - "DOMAIN-SUFFIX,telegram.me,📲 电报消息"
+  - "DOMAIN-SUFFIX,telegramcdn.org,📲 电报消息"
+  - "DOMAIN-SUFFIX,telesco.pe,📲 电报消息"
+  - "DOMAIN-SUFFIX,telegra.ph,📲 电报消息"
+
   # 进程优先
   - "PROCESS-NAME,dota2.exe,🔗 全局直连"
   - "PROCESS-NAME,steam.exe,🔗 全局直连"
@@ -268,34 +282,43 @@ rules:
   - "RULE-SET,customdirect,🔗 全局直连"
   - "RULE-SET,customproxy,🔰 模式选择"
 
+  # Google + Gemini（补充易漏匹配项；并统一交给同一策略组）
+  - "DOMAIN,gemini.google.com,🔮 Google+Gemini"
+  - "DOMAIN,bard.google.com,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,ai.google.dev,🔮 Google+Gemini"
+  - "DOMAIN,makersuite.google.com,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,gstatic.com,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,googleapis.cn,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🔮 Google+Gemini"
+
   # 常见直达模式选择域名
-  - "DOMAIN-SUFFIX,googleapis.cn,🔰 模式选择"
-  - "DOMAIN-SUFFIX,gstatic.com,🔰 模式选择"
-  - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🔰 模式选择"
   - "DOMAIN-SUFFIX,github.io,🔰 模式选择"
   - "DOMAIN,v2rayse.com,🔰 模式选择"
 
-  # AI/服务分流
+  # AI 分流
   - "RULE-SET,openai,💬 ChatGPT-Claude-XAI-Perplexity"
-  - "RULE-SET,anthropic,💬 ChatGPT-Claude-XAI-Perplexity"     # Claude 并入 ChatGPT 组
+  - "RULE-SET,anthropic,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,xai,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,perplexity,💬 ChatGPT-Claude-XAI-Perplexity"
-  - "RULE-SET,google-gemini,🔮 Gemini"                         # Gemini 独立
+  - "RULE-SET,google-gemini,🔮 Google+Gemini"
 
-  # 其它服务
-  - "RULE-SET,pikpak,🔰 模式选择"      # 原指🅿️ PikPak → 改走模式选择
-  - "RULE-SET,bybit,🔰 模式选择"       # 原指🪙 Bybit → 改走模式选择
+  # 其它服务（保持与旧 rules.yaml 一致：统一走 🔰 模式选择）
+  - "RULE-SET,pikpak,🔰 模式选择"
+  - "RULE-SET,bybit,🔰 模式选择"
 
   # 系统/直连/拦截
   - "RULE-SET,applications,🔗 全局直连"
   - "RULE-SET,private,🔗 全局直连"
   - "RULE-SET,reject,🥰 广告过滤"
+
+  # 服务分流
   - "RULE-SET,microsoft,Ⓜ️ 微软服务"
   - "RULE-SET,icloud,🍎 苹果服务"
   - "RULE-SET,apple,🍎 苹果服务"
-  - "RULE-SET,google,🔰 模式选择"      # 原指📢 谷歌服务 → 改走模式选择
+  - "RULE-SET,google,🔮 Google+Gemini"
+  - "RULE-SET,google-gemini,🔮 Google+Gemini"
 
-  # 常规出国流量
+  # 常规出国流量（保持原有顺序）
   - "RULE-SET,proxy,🔰 模式选择"
   - "RULE-SET,gfw,🔰 模式选择"
   - "RULE-SET,tld-not-cn,🔰 模式选择"
@@ -308,7 +331,7 @@ rules:
   - "GEOIP,LAN,🔗 全局直连,no-resolve"
   - "GEOIP,CN,🔗 全局直连,no-resolve"
 
-  # 兜底
+  # 兜底：未命中规则默认走「🐟 漏网之鱼」
   - "MATCH,🐟 漏网之鱼"
 
 proxy-groups:
@@ -317,6 +340,7 @@ proxy-groups:
     type: select
     proxies:
       - "⚙️ 节点选择"
+      - "🕊️ 落地节点"
       - "🔗 全局直连"
     interval: 3600
     timeout: 3000
@@ -340,6 +364,14 @@ proxy-groups:
     hidden: false
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/adjust.svg"
 
+  # 落地/家宽：组级链式到“⚙️ 节点选择”
+  - name: "🕊️ 落地节点"
+    type: select
+    include-all: true
+    filter: "(?i)落地|家宽"
+    dialer-proxy: "⚙️ 节点选择"
+    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/openwrt.svg"
+
   # “自动优选”：包含所有节点
   - name: "♻️ 延迟选优"
     type: url-test
@@ -360,6 +392,7 @@ proxy-groups:
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
+      - "🕊️ 落地节点"
       - "🔗 全局直连"
       - "♻️ 延迟选优"
     include-all: true
@@ -373,12 +406,13 @@ proxy-groups:
     hidden: false
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/chatgpt.svg"
 
-  # 独立的 Gemini 组
-  - name: "🔮 Gemini"
+  # 独立的 Google+Gemini 组
+  - name: "🔮 Google+Gemini"
     type: select
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
+      - "🕊️ 落地节点"
       - "🔗 全局直连"
       - "♻️ 延迟选优"
     include-all: true
@@ -398,6 +432,7 @@ proxy-groups:
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
+      - "🕊️ 落地节点"
       - "🔗 全局直连"
       - "♻️ 延迟选优"
     include-all: true
@@ -414,6 +449,7 @@ proxy-groups:
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
+      - "🕊️ 落地节点"
       - "🔗 全局直连"
       - "♻️ 延迟选优"
     include-all: true
@@ -430,6 +466,7 @@ proxy-groups:
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
+      - "🕊️ 落地节点"
       - "🔗 全局直连"
       - "♻️ 延迟选优"
     include-all: true
