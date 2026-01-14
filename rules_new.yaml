@@ -273,11 +273,11 @@ rules:
   - "DOMAIN-SUFFIX,telegra.ph,📲 电报消息"
 
   # 进程优先
-  - "PROCESS-NAME,dota2.exe,DIRECT"
-  - "PROCESS-NAME,steam.exe,DIRECT"
+  - "PROCESS-NAME,dota2.exe,🔗 全局直连"
+  - "PROCESS-NAME,steam.exe,🔗 全局直连"
 
   # 自定义规则：直连/代理
-  - "RULE-SET,customdirect,DIRECT"
+  - "RULE-SET,customdirect,🔗 全局直连"
   - "RULE-SET,customproxy,🔰 模式选择"
 
   # Google + Gemini（补充易漏匹配项；并统一交给同一策略组）
@@ -304,8 +304,8 @@ rules:
   - "RULE-SET,bybit,🔰 模式选择"
 
   # 系统/直连/广告
-  - "RULE-SET,applications,DIRECT"
-  - "RULE-SET,private,DIRECT"
+  - "RULE-SET,applications,🔗 全局直连"
+  - "RULE-SET,private,🔗 全局直连"
   - "RULE-SET,reject,🥰 广告过滤"
 
   # 服务分流
@@ -321,12 +321,12 @@ rules:
   - "RULE-SET,tld-not-cn,🔰 模式选择"
 
   # 直连优先
-  - "RULE-SET,direct,DIRECT"
-  - "RULE-SET,lancidr,DIRECT,no-resolve"
-  - "RULE-SET,cncidr,DIRECT,no-resolve"
+  - "RULE-SET,direct,🔗 全局直连"
+  - "RULE-SET,lancidr,🔗 全局直连,no-resolve"
+  - "RULE-SET,cncidr,🔗 全局直连,no-resolve"
   - "RULE-SET,telegramcidr,📲 电报消息,no-resolve"
-  - "GEOIP,LAN,DIRECT,no-resolve"
-  - "GEOIP,CN,DIRECT,no-resolve"
+  - "GEOIP,LAN,🔗 全局直连,no-resolve"
+  - "GEOIP,CN,🔗 全局直连,no-resolve"
 
   # 兜底：未命中规则默认走代理（🔰 模式选择）
   - "MATCH,🔰 模式选择"
@@ -337,6 +337,7 @@ proxy-groups:
     proxies:
       - "⚙️ 节点选择"
       - "🕊️ 落地节点"
+      - "🔗 全局直连"
 
   # 中继/前置选择：不包含“落地/家宽”类节点
   - name: "⚙️ 节点选择"
@@ -370,50 +371,53 @@ proxy-groups:
 
   - name: "💬 ChatGPT-Claude-XAI-Perplexity"
     type: select
-    include-all: true
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
       - "🕊️ 落地节点"
+      - "🔗 全局直连"
       - "♻️ 延迟选优"
+    include-all: true
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/chatgpt.svg"
 
   - name: "🔮 Google+Gemini"
     type: select
-    include-all: true
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
       - "🕊️ 落地节点"
+      - "🔗 全局直连"
       - "♻️ 延迟选优"
+    include-all: true
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/google.svg"
 
   - name: "📲 电报消息"
     type: select
-    include-all: true
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
       - "🕊️ 落地节点"
+      - "🔗 全局直连"
       - "♻️ 延迟选优"
+    include-all: true
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/telegram.svg"
 
   - name: "🍎 苹果服务"
     type: select
-    include-all: true
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
       - "🕊️ 落地节点"
+      - "🔗 全局直连"
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/apple.svg"
 
   - name: "Ⓜ️ 微软服务"
     type: select
-    include-all: true
     proxies:
       - "🔰 模式选择"
       - "⚙️ 节点选择"
       - "🕊️ 落地节点"
+      - "🔗 全局直连"
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/microsoft.svg"
 
   - name: "🥰 广告过滤"
@@ -422,5 +426,11 @@ proxy-groups:
       - "REJECT"
       - "DIRECT"
     icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/bug.svg"
+
+  - name: "🔗 全局直连"
+    type: select
+    proxies:
+      - "DIRECT"
+    icon: "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io/main/docs/assets/icons/link.svg"
 
 global-ua: "clash-verge/v2.2.0"
