@@ -289,6 +289,14 @@ rules:
   # 系统/直连/拦截
   - "RULE-SET,applications,🔗 全局直连"
   - "RULE-SET,private,🔗 全局直连"
+  # 番茄小说广告补充（含穿山甲广告域）
+  - "DOMAIN,dig.bdurl.net,🥰 广告过滤"
+  - "DOMAIN,dig.zjurl.cn,🥰 广告过滤"
+  - "DOMAIN,log5-applog.fqnovel.com,🥰 广告过滤"
+  - "DOMAIN,rtlog5-applog.fqnovel.com,🥰 广告过滤"
+  - "DOMAIN-SUFFIX,pglstatp-toutiao.com,🥰 广告过滤"
+  - "DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,🥰 广告过滤"
+  - "DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,🥰 广告过滤"
   - "RULE-SET,reject,🥰 广告过滤"
   - "RULE-SET,microsoft,Ⓜ️ 微软服务"
   - "RULE-SET,icloud,🍎 苹果服务"
