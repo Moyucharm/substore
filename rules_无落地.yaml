@@ -288,6 +288,7 @@ rules:
   - "DOMAIN-SUFFIX,ai.google.dev,🔮 Google+Gemini"
   - "DOMAIN,makersuite.google.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,gstatic.com,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,googleapis.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,googleapis.cn,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🔮 Google+Gemini"
 
@@ -300,7 +301,6 @@ rules:
   - "RULE-SET,anthropic,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,xai,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,perplexity,💬 ChatGPT-Claude-XAI-Perplexity"
-  - "RULE-SET,google-gemini,🔮 Google+Gemini"
 
   # 其它服务（保持与旧 rules.yaml 一致：统一走 🔰 模式选择）
   - "RULE-SET,pikpak,🔰 模式选择"

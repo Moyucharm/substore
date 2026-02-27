@@ -286,6 +286,7 @@ rules:
   - "DOMAIN-SUFFIX,ai.google.dev,🔮 Google+Gemini"
   - "DOMAIN,makersuite.google.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,gstatic.com,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,googleapis.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,googleapis.cn,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🔮 Google+Gemini"
 
