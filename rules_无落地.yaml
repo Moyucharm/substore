@@ -112,9 +112,9 @@ rule-providers:
     type: http
     format: yaml
     interval: 86400
-    behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt"
-    path: "./ruleset/loyalsoldier/google.yaml"
+    behavior: classical
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/google.yaml"
+    path: "./ruleset/MetaCubeX/google.yaml"
 
   proxy:
     type: http
@@ -280,6 +280,7 @@ rules:
   - "DOMAIN-SUFFIX,ai.google.dev,🔮 Google+Gemini"
   - "DOMAIN,makersuite.google.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,gstatic.com,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,googleusercontent.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,googleapis.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,googleapis.cn,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🔮 Google+Gemini"
