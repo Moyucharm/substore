@@ -90,14 +90,6 @@ rule-providers:
     url: "https://cdn.jsdelivr.net/gh/wangbaoqiang-lixiaolu/substore@main/custom-direct.yaml"
     path: "./ruleset/custom-direct.yaml"
 
-  customproxy:
-    type: http
-    format: yaml
-    behavior: domain
-    interval: 86400
-    url: "https://fastly.jsdelivr.net/gh/wangbaoqiang-lixiaolu/substore@main/custom-proxy.yaml"
-    path: "./ruleset/custom-proxy.yaml"
-
   icloud:
     type: http
     format: yaml
@@ -278,17 +270,19 @@ rules:
 
   # 自定义规则：直连/代理
   - "RULE-SET,customdirect,🔗 全局直连"
-  - "RULE-SET,customproxy,🔰 模式选择"
 
   # Google + Gemini（补充易漏匹配项；并统一交给同一策略组）
   - "DOMAIN,gemini.google.com,🔮 Google+Gemini"
   - "DOMAIN,bard.google.com,🔮 Google+Gemini"
+  - "DOMAIN-SUFFIX,google.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,ai.google.dev,🔮 Google+Gemini"
   - "DOMAIN,makersuite.google.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,gstatic.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,googleapis.com,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,googleapis.cn,🔮 Google+Gemini"
   - "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,🔮 Google+Gemini"
+  - "RULE-SET,google,🔮 Google+Gemini"
+  - "RULE-SET,google-gemini,🔮 Google+Gemini"
 
   # 常用需要走代理的域名
   - "DOMAIN-SUFFIX,github.io,🔰 模式选择"
@@ -321,8 +315,6 @@ rules:
   - "RULE-SET,microsoft,Ⓜ️ 微软服务"
   - "RULE-SET,icloud,🍎 苹果服务"
   - "RULE-SET,apple,🍎 苹果服务"
-  - "RULE-SET,google,🔮 Google+Gemini"
-  - "RULE-SET,google-gemini,🔮 Google+Gemini"
 
   # 常规出国流量（保持原有顺序）
   - "RULE-SET,proxy,🔰 模式选择"
