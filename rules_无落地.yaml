@@ -269,6 +269,27 @@ rules:
   # 进程优先
   - "PROCESS-NAME,dota2.exe,🔗 全局直连"
   - "PROCESS-NAME,steam.exe,🔗 全局直连"
+  # 微软账号/OneDrive 进程补充（命中后交给「Ⓜ️ 微软服务」）
+  - "PROCESS-NAME,OneDrive.exe,Ⓜ️ 微软服务"
+  - "PROCESS-NAME,Microsoft.AAD.BrokerPlugin.exe,Ⓜ️ 微软服务"
+  - "PROCESS-NAME,FileCoAuth.exe,Ⓜ️ 微软服务"
+
+  # 微软账号/OneDrive 常见漏匹配域名（保持走代理组，不强制直连）
+  - "DOMAIN,login.live.com,Ⓜ️ 微软服务"
+  - "DOMAIN,account.live.com,Ⓜ️ 微软服务"
+  - "DOMAIN,onedrive.live.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,live.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,1drv.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,1drv.ms,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,onedrive.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,microsoftonline.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,microsoftonline-p.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,office.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,office.net,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,sharepoint.com,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,msauth.net,Ⓜ️ 微软服务"
+  - "DOMAIN-SUFFIX,msftauth.net,Ⓜ️ 微软服务"
+  - "DOMAIN-KEYWORD,onedrive,Ⓜ️ 微软服务"
 
   # 自定义规则：直连/代理（对应 providers）
   - "RULE-SET,customdirect,🔗 全局直连"
@@ -452,8 +473,8 @@ proxy-groups:
   - name: "Ⓜ️ 微软服务"
     type: select
     proxies:
-      - "🔰 模式选择"
       - "⚙️ 节点选择"
+      - "🔰 模式选择"
       - "🔗 全局直连"
       - "♻️ 延迟选优"
     include-all: true
