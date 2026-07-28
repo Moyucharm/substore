@@ -270,6 +270,16 @@ rules:
   - "PROCESS-NAME,dota2.exe,🔗 全局直连"
   - "PROCESS-NAME,steam.exe,🔗 全局直连"
 
+  # Steam 下载（建议直连，速度更快）
+  - "DOMAIN-SUFFIX,steamcontent.com,🔗 全局直连"
+  - "DOMAIN-SUFFIX,steamchina.com,🔗 全局直连"
+  - "DOMAIN,st.dl.eccdnx.com,🔗 全局直连"
+  - "DOMAIN,st.dl.bscstorage.net,🔗 全局直连"
+  - "DOMAIN,st.dl.pinyuncloud.com,🔗 全局直连"
+  - "DOMAIN,dl.steam.clngaa.com,🔗 全局直连"
+  - "DOMAIN,dl.steam.ksyna.com,🔗 全局直连"
+  - "DOMAIN,steampipe.steamcontent.tnkjmec.com,🔗 全局直连"
+
   # 自定义规则：直连/代理（对应 providers）
   - "RULE-SET,customdirect,🔗 全局直连"
 
@@ -292,6 +302,18 @@ rules:
   - "DOMAIN,v2rayse.com,🔰 模式选择"
 
   # AI 分流
+  # OpenAI / ChatGPT 补充（完善易漏域名；优先于 RULE-SET,openai）
+  - "DOMAIN-SUFFIX,openai.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,chatgpt.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,ai.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,oaistatic.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,oaiusercontent.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,sora.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,chatgpt.livekit.cloud,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN,openaiapi-site.azureedge.net,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN,openaicom.imgix.net,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-KEYWORD,openai,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-KEYWORD,chatgpt-async-webps-prod,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,openai,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,anthropic,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,xai,💬 ChatGPT-Claude-XAI-Perplexity"
