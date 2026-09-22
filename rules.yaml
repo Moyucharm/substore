@@ -317,6 +317,17 @@ rules:
   - "RULE-SET,xai,💬 ChatGPT-Claude-XAI-Perplexity"
   - "RULE-SET,perplexity,💬 ChatGPT-Claude-XAI-Perplexity"
 
+  # Muse (Meta AI) 补充（Muse 主站/API/登录/CDN 与 Meta AI 周边）
+  - "DOMAIN-SUFFIX,muse.ai,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,museai.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,meta.ai,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,metaaiusercontent.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,ecto1usercontent.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,meta-agents-apps.workers.dev,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,llama.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN-SUFFIX,atmeta.com,💬 ChatGPT-Claude-XAI-Perplexity"
+  - "DOMAIN,ai.meta.com,💬 ChatGPT-Claude-XAI-Perplexity"
+
   # 其它服务（保持与旧 rules.yaml 一致：统一走 🔰 模式选择）
   - "RULE-SET,pikpak,🔰 模式选择"
   - "RULE-SET,bybit,🔰 模式选择"
